@@ -8,7 +8,7 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: /tmp/data/pv-3
 ---
@@ -22,6 +22,9 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: /tmp/data/pv-2
+# ReadWriteOnce – том может быть смонтирован на чтение и запись к одному поду.
+# ReadOnlyMany – том может быть смонтирован на много подов в режиме только чтения.
+# ReadWriteMany – том может быть смонтирован к множеству подов в режиме чтения и записи.
