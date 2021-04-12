@@ -1,0 +1,23 @@
+service_mysql:
+  port: 3306
+
+service_wp:
+  port: 80
+  type: LoadBalancer
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 20Gi
+
+imageTag_mysql: 5.6
+imageTag_wp: 4.8-apache
+
+resources:
+  requests: 
+    cpu: 50m
+    memory: 100Mi
+  limits:
+    cpu: 100m
+    memory: 100Mi
+
+replicas: 2
