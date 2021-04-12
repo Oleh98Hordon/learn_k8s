@@ -22,7 +22,7 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   hostPath:
     path: /tmp/data/pv-2
 # ReadWriteOnce – том может быть смонтирован на чтение и запись к одному поду.
