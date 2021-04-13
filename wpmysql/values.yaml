@@ -1,0 +1,29 @@
+nameOverride: ""
+fullnameOverride: ""
+
+serviceMysql:
+  port: 3306
+
+serviceWP:
+  port: 80
+  type: LoadBalancer
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 20Gi
+
+imageTagMysql: 5.6
+imageTagWP: 4.8-apache
+
+resources:
+  requests: 
+    cpu: 50m
+    memory: 100Mi
+  limits:
+    cpu: 100m
+    memory: 100Mi
+
+replicas: 2
+
+ingress:
+  enabled: false
