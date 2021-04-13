@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}
-  labels: {{- include "wp_mysql.labels" . | nindent 4 }}
+  name: {{ include "wpMysql.fullname" . }}
+  labels: {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   ports:
     - port: {{ .Values.service_mysql.port }}
-  selector: {{- include "wp_mysql.selectorLabels" . | nindent 4 }}
+  selector: {{- include "wpMysql.selectorLabels" . | nindent 4 }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}-mysql_pvc
+  name: {{ include "wpMysql.fullname" . }}-mysql-pvc
   labels:
-     {{- include "wp_mysql.labels" . | nindent 4 }}
+     {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote}}
@@ -24,22 +24,22 @@ spec:
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}
+  name: {{ include "wpMysql.fullname" . }}
   labels:
-     {{- include "wp_mysql.labels" . | nindent 4 }}
+     {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-     {{- include "wp_mysql.selectorLabels" . | nindent 6 }}
+     {{- include "wpMysql.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-     {{- include "wp_mysql.selectorLabels" . | nindent 8 }}
+     {{- include "wpMysql.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - image: "mysql:{{ .Values.imageTag_mysql}}"
+      - image: "mysql:{{ .Values.imageTagMysql}}"
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -62,7 +62,7 @@ spec:
         resources: # використовується для контролю ресурсів в кластері
 {{ toYaml .Values.resources | indent 10}}
         ports:
-        - containerPort: {{ .Values.service_mysql.port }}
+        - containerPort: {{ .Values.serviceMysql.port }}
           name: mysql
         volumeMounts:
         - name: mysql-persistent-storage
@@ -70,4 +70,4 @@ spec:
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: {{ include "wp_mysql.fullname" . }}-mysql_pvc
+          claimName: {{ include "wpMysql.fullname" . }}-mysql-pvc

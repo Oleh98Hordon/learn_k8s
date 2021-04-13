@@ -1,21 +1,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}
+  name: {{ include "wpMysql.fullname" . }}
   labels:
-     {{- include "wp_mysql.labels" . | nindent 4 }}
+     {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   ports:
-    - port: {{ .Values.service_wp.port }}
-  selector: {{- include "wp_mysql.selectorLabels" . | nindent 4 }}
-  type: {{ .Values.service_wp.type }}
+    - port: {{ .Values.serviceWP.port }}
+  selector: {{- include "wpMysql.selectorLabels" . | nindent 4 }}
+  type: {{ .Values.serviceWP.type }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}-pvc
+  name: {{ include "wpMysql.fullname" . }}-pvc
   labels:
-     {{- include "wp_mysql.labels" . | nindent 4 }}
+     {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote}}
@@ -26,21 +26,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "wp_mysql.fullname" . }}
+  name: {{ include "wpMysql.fullname" . }}
   labels:
-     {{- include "wp_mysql.labels" . | nindent 4 }}
+     {{- include "wpMysql.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas}}
   selector:
     matchLabels:
-     {{- include "wp_mysql.selectorLabels" . | nindent 6 }}
+     {{- include "wpMysql.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-     {{- include "wp_mysql.selectorLabels" . | nindent 8 }}
+     {{- include "wpMysql.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - image: "wordpress:{{ .Values.imageTag_wp}}"
+      - image: "wordpress:{{ .Values.imageTagWP}}"
         name: wordpress
         env:
         - name: WORDPRESS_DB_HOST
@@ -54,7 +54,7 @@ spec:
         resources: 
 {{ toYaml .Values.resources | indent 10}}
         ports:
-        - containerPort: {{ .Values.service_wp.port }}
+        - containerPort: {{ .Values.serviceWP.port }}
           name: wordpress
         volumeMounts:
         - name: wordpress-persistent-storage
@@ -62,4 +62,4 @@ spec:
       volumes:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:
-          claimName: {{ include "wp_mysql.fullname" . }}-pvc
+          claimName: {{ include "wpMysql.fullname" . }}-pvc
